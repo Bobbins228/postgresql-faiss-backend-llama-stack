@@ -1,0 +1,71 @@
+apiVersion: llamastack.io/v1alpha1
+kind: LlamaStackDistribution
+metadata:
+  name: llama-stack-distribution-mark
+spec:
+  replicas: 1
+  server:
+    containerSpec:
+      resources:
+        requests:
+          cpu: "250m"
+          memory: "500Mi"
+        limits:
+          cpu: "8"
+          memory: "12Gi"
+      env:
+        - name: INFERENCE_MODEL
+          valueFrom:
+            secretKeyRef:
+              key: INFERENCE_MODEL
+              name: llama-stack-inference-model-secret
+        - name: VLLM_URL
+          valueFrom:
+            secretKeyRef:
+              key: VLLM_URL
+              name: llama-stack-inference-model-secret
+        - name: VLLM_TLS_VERIFY
+          valueFrom:
+            secretKeyRef:
+              key: VLLM_TLS_VERIFY
+              name: llama-stack-inference-model-secret
+        - name: VLLM_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: VLLM_API_TOKEN
+              name: llama-stack-inference-model-secret
+        - name: FMS_ORCHESTRATOR_URL
+          value: "http://localhost"
+        - name: LLAMA_STACK_CONFIG_DIR
+          value: /opt/app-root/src/.llama/distributions/rh
+        - name: LLAMA_STACK_DISABLE_VERSION_CHECK
+          value: "true"
+        - name: ENABLE_FAISS
+          value: faiss
+        - name: FAISS_KVSTORE_TYPE
+          value: postgres
+        - name: FAISS_KVSTORE_HOST
+          value: postgres.mark-faiss-testing.svc.cluster.local
+        - name: FAISS_KVSTORE_PORT
+          value: "5432"
+        - name: FAISS_KVSTORE_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRESQL_DATABASE
+        - name: FAISS_KVSTORE_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRESQL_USER
+        - name: FAISS_KVSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRESQL_PASSWORD
+        - name: FAISS_KVSTORE_TABLE_NAME
+          value: faiss_vectors
+      name: llama-stack
+      port: 8321 
+    distribution:
+      name: rh-dev
