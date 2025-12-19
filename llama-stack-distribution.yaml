@@ -14,6 +14,10 @@ spec:
           cpu: "8"
           memory: "12Gi"
       env:
+        - name: ENABLE_SENTENCE_TRANSFORMERS
+          value: "true"
+        - name: EMBEDDING_PROVIDER
+          value: "sentence-transformers"
         - name: INFERENCE_MODEL
           valueFrom:
             secretKeyRef:
@@ -34,6 +38,10 @@ spec:
             secretKeyRef:
               key: VLLM_API_TOKEN
               name: llama-stack-inference-model-secret
+        - name: POSTGRES_HOST
+          value: postgres.faiss-postgres.svc.cluster.local
+        - name: POSTGRES_PORT
+          value: "5432"
         - name: FMS_ORCHESTRATOR_URL
           value: "http://localhost"
         - name: LLAMA_STACK_CONFIG_DIR
@@ -45,7 +53,7 @@ spec:
         - name: FAISS_KVSTORE_TYPE
           value: postgres
         - name: FAISS_KVSTORE_HOST
-          value: postgres.mark-faiss-testing.svc.cluster.local
+          value: postgres.faiss-postgres.svc.cluster.local
         - name: FAISS_KVSTORE_PORT
           value: "5432"
         - name: FAISS_KVSTORE_DB
