@@ -1,4 +1,4 @@
-NAMESPACE=faiss-testing
+NAMESPACE=faiss-postgres
 
 deploy-all:
 	oc apply -f postgres-pvc.yaml -n $(NAMESPACE)
